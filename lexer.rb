@@ -1,7 +1,7 @@
 require 'strscan'
 
-SYMBOLS = %w(= + -).map { |x| Regexp.quote(x) }
-KEYWORDS = %w(let)
+SYMBOLS = %w[= + -].map { |x| Regexp.quote(x) }
+KEYWORDS = %w[let puts].freeze
 
 class Lexer
   attr_reader :tokens, :str, :scanner
