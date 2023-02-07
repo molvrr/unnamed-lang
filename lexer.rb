@@ -1,7 +1,9 @@
 require 'strscan'
 
 SYMBOLS = %w[= + -].map { |x| Regexp.quote(x) }
-KEYWORDS = %w[let puts].freeze
+KEYWORDS = %w[valorzinho puts].freeze
+
+class InvalidToken < StandardError; end
 
 class Lexer
   attr_reader :tokens, :str, :scanner
@@ -21,13 +23,13 @@ class Lexer
       when tok = scanner.scan(/(#{KEYWORDS.join('|')})/)
         tokens << [tok, nil]
       when tok = scanner.scan(/(\d+)/)
-        tokens << [:INT, tok.to_i]
+        tokens << [:INTEIRO, tok.to_i]
       when tok = scanner.scan(/(\w+)/)
-        tokens << [:WORD, tok]
+        tokens << [:PALAVRA, tok]
       when scanner.scan(/"/)
-        tokens << [:STRING, scanner.scan_until(/"/)[..-2]]
+        tokens << [:SENTENCA, scanner.scan_until(/"/)[..-2]]
       else
-        raise "Can't recognize token #{scanner.peek(5)}"
+        raise InvalidToken, "Erro na coluna #{scanner.pos}. Não consegui reconhecer este token: #{scanner.peek(5)}"
       end
     end
 
